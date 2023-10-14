@@ -1,0 +1,60 @@
+.App {
+  text-align: center;
+}
+
+.form-Brick {
+  margin-bottom: 20px;
+  padding: 0 15px;
+}
+
+.form-Brick-body {
+  -webkit-box-shadow: 3px 3px 5px 0 rgba(0,0,0,.05);
+  box-shadow: 3px 3px 5px 0 rgba(0,0,0,.05);
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  padding: 20px 15px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.custom-field label {
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-image: none;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.commonLabel {
+  color: #7e91a4;
+  font-size: 13px;
+  margin-bottom: 5px;
+  /* float: left; */
+}
+
+.mandatory, .mandatoryReport {
+  border-left: 3px solid #ff3e55;
+}
+
+.textField, .textFieldMultiSelect {
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  width: -webkit-fill-available;
+}
+.textField {
+  height: 40px;
+}
