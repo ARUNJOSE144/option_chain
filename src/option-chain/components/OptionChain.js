@@ -64,8 +64,8 @@ export default class OptionChain extends Component {
 
       //Moving Avarage
       for (let index = 0; index < array.length; index++) {
-        array[index].put = parseInt(array[index].put.replaceAll(",", ""))
-        array[index].call = parseInt(array[index].call.replaceAll(",", ""))
+        array[index].put = parseFloat(array[index].put.replaceAll(",", ""))
+        array[index].call = parseFloat(array[index].call.replaceAll(",", ""))
         array[index].diff = array[index].put - array[index].call;
         array[index].pcr = array[index].put / array[index].call;
         if (index - MA + 1 >= 0) {
