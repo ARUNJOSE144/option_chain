@@ -439,7 +439,7 @@ export default class OptionChain extends Component {
 
     console.log("Dataprovider : ", this.state.dataProvider);
     return (
-      <div className="custom-container" style={{ padding: "17px",backgroundColor:"#eaeaea" }}>
+      <div className="custom-container" style={{ padding: "17px", backgroundColor: "#eaeaea" }}>
         <div className="form-Brick" style={{ padding: "0px" }}>
           {/*  <div className="form-Brick-Head">
             <span>Basic Details  </span>
@@ -505,6 +505,17 @@ export default class OptionChain extends Component {
             </div>
           </div>
 
+          {this.state.dataProvider.length > 0 ?
+            <div className="form-Brick-body" style={{ marginTop: "10px" }}>
+              <center><b>PUT-CALL Difference</b></center>
+              <div>
+                <AmCharts.React
+                  style={{ width: "100%", height: "450px" }}
+                  options={lineChartConfig}
+                />
+              </div>
+            </div> : null}
+
           <div className="row">
             <div className="col-md-12" >
               {this.state.dataProvider.length > 0 ?
@@ -519,18 +530,6 @@ export default class OptionChain extends Component {
                 </div> : null}
             </div>
 
-            <div className="col-md-12" >
-              {this.state.dataProvider.length > 0 ?
-                <div className="form-Brick-body" style={{ marginTop: "10px", padding: "0px" }}>
-                  <center><b>PCR ( Uptrend : {'>'} 1 , Downtrend : {'<'} 1 )</b></center>
-                  <div>
-                    <AmCharts.React
-                      style={{ width: "100%", height: "450px" }}
-                      options={pcrConfig}
-                    />
-                  </div>
-                </div> : null}
-            </div>
 
             <div className="col-md-12" >
               {this.state.dataProvider.length > 0 ?
@@ -547,19 +546,18 @@ export default class OptionChain extends Component {
           </div>
 
 
-
-
-
-          {this.state.dataProvider.length > 0 ?
-            <div className="form-Brick-body" style={{ marginTop: "10px" }}>
-              <center><b>PUT-CALL Difference</b></center>
-              <div>
-                <AmCharts.React
-                  style={{ width: "100%", height: "450px" }}
-                  options={lineChartConfig}
-                />
-              </div>
-            </div> : null}
+          <div className="col-md-12" >
+            {this.state.dataProvider.length > 0 ?
+              <div className="form-Brick-body" style={{ marginTop: "10px", padding: "0px" }}>
+                <center><b>PCR ( Uptrend : {'>'} 1 , Downtrend : {'<'} 1 )</b></center>
+                <div>
+                  <AmCharts.React
+                    style={{ width: "100%", height: "450px" }}
+                    options={pcrConfig}
+                  />
+                </div>
+              </div> : null}
+          </div>
 
           {this.state.dataProvider.length > 0 ?
             <div className="form-Brick-body" style={{ marginTop: "10px", maxHeight: "300px", overflow: "auto" }}>
