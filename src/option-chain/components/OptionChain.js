@@ -67,17 +67,28 @@ export default class OptionChain extends Component {
         array[index].put = parseFloat(array[index].put.replaceAll(",", ""))
         array[index].call = parseFloat(array[index].call.replaceAll(",", ""))
         array[index].diff = array[index].put - array[index].call;
+        array[index].diff = parseFloat(array[index].diff)?.toFixed(1)
+        array[index].diff = parseFloat(array[index].diff)
         array[index].pcr = array[index].put / array[index].call;
-        if (index - MA + 1 >= 0) {
+         if (index - MA + 1 >= 0) {
           var sum = 0;
           for (var j = index; j > index - MA; j--) {
             sum += array[j].diff
           }
           array[index].movingAvg = sum / MA
+        } 
+
+        if (index != 0) {
+          if (array[index].diff > array[index - 1].diff) {
+            array[index].trend = "uptrend"
+          } else if (array[index].diff < array[index - 1].diff) {
+            array[index].trend = "downtrend"
+          }
+
         }
 
-
       }
+      console.log("=========array: " + JSON.stringify(array))
       if (this.validate(this.state.recordCount) && this.state.recordCount.value != -1) {
         //remove the initial N records
         array = array.slice(this.state.recordCount.value * -1)
@@ -506,6 +517,34 @@ export default class OptionChain extends Component {
           </div>
 
           {this.state.dataProvider.length > 0 ?
+            <div className="form-Brick-body" style={{ marginTop: "10px", maxHeight: "300px", overflow: "auto" }}>
+              <center><b>Option Chain(In Lakhs)</b></center>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">CALL</th>
+                    <th scope="col">PUT</th>
+                    <th scope="col">Diff(PUT-CALL)</th>
+                    {/* <th scope="col">Average</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.dataProvider.slice().reverse().map((row, i) => (
+                    <tr>
+                      <th scope="row">{row.time}</th>
+                      <td>{row.call}</td>
+                      <td>{row.put}</td>
+                      <td style={{ backgroundColor: row?.trend == "uptrend" ? "green" : row?.trend == "downtrend" ? "red" : "#d4d4f8" ,color:"white",fontWeight:"700"}}>{row.diff}</td>
+                      {/* <td>{row.movingAvg}</td> */}
+                    </tr>
+                  ))}
+
+                </tbody>
+              </table>
+            </div> : null}
+
+          {this.state.dataProvider.length > 0 ?
             <div className="form-Brick-body" style={{ marginTop: "10px" }}>
               <center><b>PUT-CALL Difference</b></center>
               <div>
@@ -559,33 +598,6 @@ export default class OptionChain extends Component {
               </div> : null}
           </div>
 
-          {this.state.dataProvider.length > 0 ?
-            <div className="form-Brick-body" style={{ marginTop: "10px", maxHeight: "300px", overflow: "auto" }}>
-              <center><b>Option Chain</b></center>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Time</th>
-                    <th scope="col">CALL</th>
-                    <th scope="col">PUT</th>
-                    <th scope="col">Diff(PUT-CALL)</th>
-                    <th scope="col">Average</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.dataProvider.map((row, i) => (
-                    <tr>
-                      <th scope="row">{row.time}</th>
-                      <td>{row.call}</td>
-                      <td>{row.put}</td>
-                      <td>{row.diff}</td>
-                      <td>{row.movingAvg}</td>
-                    </tr>
-                  ))}
-
-                </tbody>
-              </table>
-            </div> : null}
 
         </div>
 
