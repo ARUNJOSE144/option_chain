@@ -70,13 +70,13 @@ export default class OptionChain extends Component {
         array[index].diff = parseFloat(array[index].diff)?.toFixed(1)
         array[index].diff = parseFloat(array[index].diff)
         array[index].pcr = array[index].put / array[index].call;
-         if (index - MA + 1 >= 0) {
+        if (index - MA + 1 >= 0) {
           var sum = 0;
           for (var j = index; j > index - MA; j--) {
             sum += array[j].diff
           }
           array[index].movingAvg = sum / MA
-        } 
+        }
 
         if (index != 0) {
           if (array[index].diff > array[index - 1].diff) {
@@ -84,8 +84,19 @@ export default class OptionChain extends Component {
           } else if (array[index].diff < array[index - 1].diff) {
             array[index].trend = "downtrend"
           }
-
         }
+
+        var MIN_CHANGE_PERCENTAGE = 35
+        if (array[index].put > array[index].call) {
+          var changePercent = (array[index].put - array[index].call) / array[index].call * 100
+          array[index].changePercent = changePercent.toFixed(1);
+          array[index].currentTrend = changePercent > MIN_CHANGE_PERCENTAGE ? "Uptrend" : "No Trend"
+        } else {
+          var changePercent = (array[index].call - array[index].put) / array[index].put * 100
+          array[index].changePercent = changePercent.toFixed(1);
+          array[index].currentTrend = changePercent > MIN_CHANGE_PERCENTAGE ? "Downtrend" : "No Trend"
+        }
+
 
       }
       console.log("=========array: " + JSON.stringify(array))
@@ -527,6 +538,8 @@ export default class OptionChain extends Component {
                     <th scope="col">PUT</th>
                     <th scope="col">Diff(PUT-CALL)</th>
                     {/* <th scope="col">Average</th> */}
+                    <th scope="col">Trend</th>
+                    <th scope="col">Change %</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -535,8 +548,10 @@ export default class OptionChain extends Component {
                       <th scope="row">{row.time}</th>
                       <td>{row.call}</td>
                       <td>{row.put}</td>
-                      <td style={{ backgroundColor: row?.trend == "uptrend" ? "green" : row?.trend == "downtrend" ? "red" : "#d4d4f8" ,color:"white",fontWeight:"700"}}>{row.diff}</td>
+                      <td style={{ backgroundColor: row?.trend == "uptrend" ? "green" : row?.trend == "downtrend" ? "red" : "#d4d4f8", color: "white", fontWeight: "700" }}>{row.diff}</td>
                       {/* <td>{row.movingAvg}</td> */}
+                      <td style={{ backgroundColor: row?.currentTrend == "Uptrend" ? "green" : row?.currentTrend == "Downtrend" ? "red" : "#d4d4f8", color: "white", fontWeight: "700" }}>{row.currentTrend}</td>
+                      <td> {row.changePercent}</td>
                     </tr>
                   ))}
 
