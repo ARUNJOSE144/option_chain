@@ -11,6 +11,7 @@ export default class OptionChain extends Component {
       jsonData: [],
       fields: {},
       dataProvider: [],
+      modeList: [{ label: "Auto", value: "Auto" }, { label: "Manual", value: "Manual" },],
       recordCountList: [{ label: "All", value: -1 }, { label: "5", value: 5 }, { label: "10", value: 10 },
       { label: "15", value: 15 }, { label: "20", value: 20 }, { label: "30", value: 30 }, { label: "40", value: 40 },
       { label: "50", value: 50 }, { label: "75", value: 75 }, { label: "100", value: 100 }, { label: "150", value: 150 }],
@@ -18,14 +19,51 @@ export default class OptionChain extends Component {
       movingAvgs: [{ label: "2", value: 2 }, { label: "3", value: 3 }, { label: "4", value: 4 }, { label: "5", value: 5 },
       { label: "6", value: 6 }, { label: "7", value: 7 }, { label: "8", value: 8 }, { label: "9", value: 9 },
       { label: "10", value: 10 }, { label: "15", value: 15 }, { label: "20", value: 20 }, { label: "25", value: 25 }],
-      movingAvg: { label: "5", value: 5 }
+      movingAvg: { label: "5", value: 5 },
+
+      mode: { label: "Auto", value: "Auto" },
+      symbolList: [{ label: "NIFTY", value: "NI" }, { label: "BANKNIFTY", value: "BA" },],
+      symbol: { label: "BANKNIFTY", value: "BA" }
     };
     //this.props.setHeader("Option Chain");
   }
 
   componentDidMount() {
+    var self = this;
+    setInterval(function() {self.loadDataFromBackend()}, 5000);
   }
 
+  loadDataFromBackend = () => {
+    var self = this;
+    if (this.state?.mode.value == "Auto") {
+      const apiUrl = 'http://localhost:8080/mfaservices/trade/v1/oiData';
+
+      const dataToSend = {
+        symbol: this.state.symbol.value
+      };
+
+      // Define the request options with method and body
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)  // Convert JavaScript object to JSON string
+      };
+
+      // Make the API call
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())  // Parse the JSON from the response
+        .then(data => {
+          console.log('Response data:', data);
+          self.state.jsonData = data.data;
+          self.formatJson()
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  }
 
   handleChange(name, parent, value, obj) {
     console.log("name----", name);
@@ -470,7 +508,33 @@ export default class OptionChain extends Component {
           <div className="form-Brick-body">
             <div className="row">
 
-              <div className="col-md-8">
+              <div className="col-md-1">
+                <div >
+                  <label className="commonLabel">  Mode  </label>
+                </div>
+                <Select options={this.state.modeList}
+                  value={this.state.mode}
+                  onChange={(e) => this.handleChange("mode", this.state, e)}
+                  className="textField" />
+                <div>
+                  {/* <label className="default-validateLabel"> {getMsg(this.state.field.title)} </label> */}
+                </div>
+              </div>
+
+              <div className="col-md-1">
+                <div >
+                  <label className="commonLabel">  Symbol  </label>
+                </div>
+                <Select options={this.state.symbolList}
+                  value={this.state.symbol}
+                  onChange={(e) => this.handleChange("symbol", this.state, e)}
+                  className="textField" />
+                <div>
+                  {/* <label className="default-validateLabel"> {getMsg(this.state.field.title)} </label> */}
+                </div>
+              </div>
+
+              <div className="col-md-6">
                 <div >
                   <label className="commonLabel">  OI Data  </label>
                 </div>

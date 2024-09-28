@@ -14,6 +14,9 @@
     <textarea style="margin: 0px; width: 1200px; height: 200px;">   
 	
 
+   
+	
+
 
 var spot_price = ""
 var SELECTED_TOTAL_CALLS = []
@@ -54,12 +57,8 @@ function readDataFromOptionChain() {
         var row = optionChain.children[i];
         var strikePrice = parseFloat(formatNumber(row.children[3].children[0].children[0].textContent))
         if (SELECTED_STRIKE.includes(strikePrice)) {
-
-            console.log("call : " + parseFloat(formatNumber(row.children[1].children[0].textContent)))
-            console.log("put : " + parseFloat(formatNumber(row.children[6].children[0].textContent)))
-
             total_Call = total_Call + parseFloat(formatNumber(row.children[1].children[0].textContent));
-            total_put = total_put + parseFloat(formatNumber(row.children[6].children[0].textContent));
+            total_put = total_put + parseFloat(formatNumber(row.children[5].children[0].textContent));
             //console.log("call : " + formatNumber(row.children[1].textContent))
             //console.log("put : " + formatNumber(row.children[21].textContent))
 
@@ -104,6 +103,41 @@ function processResult() {
     console.table(RESULT)
     audio.play();
     console.log(JSON.stringify(RESULT))
+	downloadFile(JSON.stringify(RESULT))
+}
+
+function downloadFile(content) {
+	var fileName=generateFileName("BA")
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;                       
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    // Clean up the object URL after the download
+    URL.revokeObjectURL(url);
+}
+
+function generateFileName(symbol) {
+    const now = new Date();
+    
+    // Get the current date and time components
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are zero-based
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const second = String(now.getSeconds()).padStart(2, '0');
+    const millisecond = String(now.getMilliseconds()).padStart(3, '0');
+    
+    // Combine the components into the required format
+    const fileName = `${symbol}_${year}_${month}_${day}_${hour}_${minute}_${second}_${millisecond}`;
+    
+    return fileName;
 }
 
 //doing
@@ -168,6 +202,11 @@ function validate(value) {
         return false;
     }
 }
+
+
+
+
+	
 
 
 
